@@ -6,6 +6,17 @@ class Library {
         $db = new Database();
         $this->conn = $db->getConnection();
     }
+    public function findBook ($title,$auteur){
+        $sql = "SELECT * FROM books WHERE title = ? AND author = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$title, $auteur]);
+        $book = $stmt->fetch(PDO::FETCH_OBJ);
+        if ($book) {
+            return new Book($book->title, $book->auteur);
+        } else {
+            return null;
+        }
+    }
     public function addBook($book) {
         $sql = "INSERT INTO books (title, author, isbn, is_available)
                 VALUES (?,?,?,?)";
