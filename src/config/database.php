@@ -9,15 +9,12 @@ class Database {
 
     public function getConnection() {
         $this->conn = null;
-
         try {
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
-            // error in sQL
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch(PDOException $exception) {
             echo "Error inconnexion: " . $exception->getMessage();
         }
-
         return $this->conn;
     }
 }
