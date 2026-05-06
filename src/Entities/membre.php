@@ -13,6 +13,14 @@ public function getBorrowedBooks(){
 public function addBorrowedBook($book){
     $this->borrowedBooks[]=$book;
 }
-
+public function removeBorrowedBook($isbn){
+    foreach($this->borrowedBooks as $key=>$book){
+        if($book->getIsbn()==$isbn){
+            unset($this->borrowedBooks[$key]);
+            return true;
+        }
+    }
+    return false;
+}
 
 }
