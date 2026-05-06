@@ -10,7 +10,9 @@ public function __construct($id,$name,$email,$type){
 public function getBorrowedBooks(){
     return $this->borrowedBooks;
 }
-
+public function addBorrowedBook($book){
+    $this->borrowedBooks[]=$book;
+}
 
 
 }
