@@ -1,18 +1,21 @@
 <?php
 require "user.php";
+require "../Services/Library.php";
 class Librarian extends User{
+     private $Library;
      public addBook($book){
-        $books[]=$book
+          $this-$Library->addBook($book);
      }
-     public creeMembre(){
-  
+     public creeMembre($membre){
+         $this-$Library->addMembre($membre);
      }
-     public displaybooks($books){
+     public displaybooks(){
+          $this-$Library->displayBooks();
      }
-     public deleteBook(){
-
+     public deleteBook($bookD){
+          $this-$Library->deleteBook($bookD);
      }
      public function __toString(){
-          return parent::__toString
+          return parent::__toString;
      }
 }
