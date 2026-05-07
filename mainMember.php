@@ -17,28 +17,28 @@ while (true) {
     echo "3. Mes livres empruntés (US8)\n";
     echo "4. Rendre un livre (US7)\n";
     echo "5. Quitter\n";
-    $choix = readline("Ekhtar chi haja (1-5): ");
+    $choix = readline("enter your choice (1-5): ");
     switch ($choix) {
         case "1":
-            $titre = readline("Dakhel smit l-ktab: ");
-            $auteur = readline("Dakhel smit l-auteur: ");
+            $titre = readline("enter the book title: ");
+            $auteur = readline("enter the auteur name: ");
             $book = $user->findBook($titre, $auteur);
             if ($book) {
                 echo "Livre trouvé: " . $book->getTitle() . " (ISBN: " . $book->getIsbn() . ")\n";
             } else {
-                echo "Désolé, ktab makayench aw déjà m-salaf.\n";
+                echo "sorry, book not found.\n";
             }
             break;
 
         case "2":
-            $titre = readline("Smit l-ktab li bghiti t-tsellef: ");
-            $auteur = readline("Smit l-auteur: ");
+            $titre = readline("enter the book title what you want to borrow: ");
+            $auteur = readline("enter the auteur name: ");
             $book = $user->findBook($titre, $auteur);
             
             if ($book) {
                 echo $user->borrow($book) . "\n";
             } else {
-                echo "Ktab non trouvé.\n";
+                echo "sorry, book not found.\n";
             }
             break;
 
@@ -47,15 +47,15 @@ while (true) {
             break;
 
         case "4":
-            $isbn = readline("Dakhel l-ISBN dyal l-ktab li at-rje3: ");
+            $isbn = readline("enter the ISBN of the book you want to return: ");
             echo $user->returnBook($isbn) . "\n";
             break;
 
         case "5":
-            exit("Bslama! À la prochaine.\n");
+            exit("goodbye , another time.\n");
 
         default:
-            echo "Choix invalide, 3awed khtar.\n";
+            echo "choice invalid, tray another choice.\n";
             break;
     }
 }
