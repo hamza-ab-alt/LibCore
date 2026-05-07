@@ -9,4 +9,7 @@ class User{
     public function __toString(){
         return $this->name." ".$this->email;
     }
+    public function getName(){
+        return $this->name;
+    }
 }

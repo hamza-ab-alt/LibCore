@@ -50,6 +50,8 @@ while (true) {
             $isbn=readLine();
             $librarian->deleteBook($isbn);
             break;
+        case 4:
+            
         default:
             echo("number doesnt exist in the menu\n");
     }

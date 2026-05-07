@@ -20,6 +20,7 @@ while (true) {
     $choix = readline("Ekhtar chi haja (1-5): ");
     switch ($choix) {
         case "1":
+            $library->displayBooks();
             $titre = readline("Dakhel smit l-ktab: ");
             $auteur = readline("Dakhel smit l-auteur: ");
             $book = $user->findBook($titre, $auteur);

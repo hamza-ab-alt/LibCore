@@ -1,16 +1,11 @@
 <?php
-
-namespace LibeCore\Entities;
-
+require_once "user.php";
 class Membre extends User {
-
     private $type;
     private $borrowedBooks;
     private $library;
-
-    public function __construct($id, $name, $email, $type, $library) {
-
-        parent::__construct($id, $name, $email);
+    public function __construct($name, $email, $type, $library) {
+        parent::__construct($name, $email);
 
         $this->type = $type;
         $this->library = $library;

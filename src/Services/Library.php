@@ -24,8 +24,27 @@ class Library {
         return $e->getMessage();
        }
     }
-    public function addMember($member) {
-    }
+    public function addMembre($name,$prenom,$role){
+        try {
+            $sql ="INSERT INTO users (nom,prenom,dateC) values(?,?,now())";
+            $stm=$this->conn->prepare($sql);
+            $stm->execute([$name,$prenom]);
+            $lastId=$this->conn->lastInsertId();
+            if($role='S'){
+                $sql="INSERT INTO membres (role_id,user_id) values (2,?)";
+                $stm=$this->conn->prepare($sql);
+                $stm->execute([$lastId]);
+            }elseif ($role=="P") {
+                $sql="INSERT INTO membres (role_id,user_id) values (1,?)";
+                $stm=$this->conn->prepare($sql);
+                $stm->execute([$lastId]);
+            }
+            echo "add with success";
+            }catch (PDOException $e) {
+            echo $e->getMessage();
+             }
+        } 
+    
     public function displayBooks() {
         $sql = "SELECT * FROM books";
         $stmt = $this->conn->prepare($sql);
@@ -74,7 +93,6 @@ class Library {
             $sql = "UPDATE books SET is_available = 0 WHERE isbn = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute([$book->getIsbn()]);
-
             return new Borrow($member, $book, date("Y-m-d"));
         } catch (\Exception $e) {
             return null;
