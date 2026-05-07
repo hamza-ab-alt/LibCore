@@ -1,47 +1,57 @@
 <?php
+
+namespace LibeCore\Entities;
+
 class Membre extends User {
+
     private $type;
-    private $borrowedBooks = []; 
+    private $borrowedBooks;
     private $library;
 
-    public function __construct( $name, $email, $type, $library) {
-        parent::__construct($name,$email);
+    public function __construct($id, $name, $email, $type, $library) {
+
+        parent::__construct($id, $name, $email);
+
         $this->type = $type;
         $this->library = $library;
+        $this->borrowedBooks = [];
     }
-    public function getName() {
-        return $this->name;
-    }
-    public function findBook($title, $auteur) {
-        return $this->library->findBook($title, $auteur);
+
+    public function getType() {
+        return $this->type;
     }
 
     public function getBorrowedBooks() {
-        if (empty($this->borrowedBooks)) return "Aucun livre emprunté.\n";
-        $text = "Mes Emprunts:\n";
-        foreach ($this->borrowedBooks as $borrow) {
-            $text .= $borrow . "\n";
+
+        $text = "";
+
+        foreach ($this->borrowedBooks as $book) {
+            $text .= $book . "\n";
         }
+
         return $text;
     }
-    public function borrow($book) {
-        $newBorrow = $this->library->addBorrowedBook($book, $this);
-        if ($newBorrow) {
-            $this->borrowedBooks[] = $newBorrow;
-            return "Emprunt réussi!";
-        }
-        return "Livre indisponible.";
+
+    public function findBook($title, $author) {
+
+        return $this->library->findBook($title, $author);
     }
 
-    public function returnBook($isbn) {
-        foreach ($this->borrowedBooks as $key => $borrow) {
-            if ($borrow->getBook()->getIsbn() === $isbn) {
-                if ($this->library->removeBorrowedBook($isbn)) {
-                    unset($this->borrowedBooks[$key]);
-                    return "Livre retourné.";
-                }
-            }
-        }
-        return "Livre non trouvé dans votre liste.";
+    public function addBorrowedBook($book, $dateApp, $dateRetour) {
+
+        $this->library->addBorrowedBook(
+            $book,
+            $this,
+            $dateApp,
+            $dateRetour
+        );
+    }
+
+    public function removeBorrowedBook($isbn) {
+
+        $this->library->removeBorrowedBook(
+            $isbn,
+            $this
+        );
     }
 }
