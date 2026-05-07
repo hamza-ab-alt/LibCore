@@ -17,6 +17,7 @@ CREATE TABLE books (
     isbn VARCHAR(255) NOT NULL,
     auteur VARCHAR(255) NOT NULL
 );
+ALTER TABLE books ADD is_available BOOLEAN;
 CREATE TABLE bibliotheques (
     id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
@@ -27,6 +28,10 @@ CREATE TABLE membres (
     role_id INT NOT NULL,
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
+ALTER TABLE membres ADD user_id INT;
+
+ALTER TABLE membres
+ADD FOREIGN KEY (user_id) REFERENCES users(id);
 CREATE TABLE borrowings (
     id INT PRIMARY KEY AUTO_INCREMENT,
     membre_id INT NOT NULL,

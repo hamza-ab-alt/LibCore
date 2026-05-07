@@ -1,8 +1,6 @@
 <?php
-
-require "user.php";
-require "../Services/Library.php";
-
+require_once "user.php";
+require_once __DIR__ . "/../Services/Library.php";
 class Librarian extends User {
 
     private $Library;
@@ -11,7 +9,7 @@ class Librarian extends User {
         parent::__counstructor($name,$email);
         $this->Library = $library;
     }
-
+    
     public function addBook($book) {
         $this->Library->addBook($book);
     }
@@ -29,10 +27,6 @@ class Librarian extends User {
     }
 
     public function __toString() {
-        return parent::__toString();
+        return parent::__toString()." Librarian";
     }
 }
-$library = new Library();
-$lb1 = new Librarian("salah","tabitsalah12@gmail.com",$library);
-
-echo $lb1;
