@@ -2,7 +2,7 @@
 class User{
     private $name;
     private $email;
-    function __counstructor($name,$email){
+    function __construct($name,$email){
              $this->name=$name;
              $this->email=$email;
     }

@@ -1,23 +1,12 @@
 <?php
 require_once __DIR__."/../config/database.php";
-require __DIR__."/../Entities/book.php";
-require __DIR__."/../Entities/borrow.php";
+require_once __DIR__."/../Entities/book.php";
+require_once __DIR__."/../Entities/broow.php";
 class Library {
     private $conn;
     public function __construct() {
         $db = new Database();
         $this->conn = $db->getConnection();
-    }
-    public function findBook ($title,$auteur){
-        $sql = "SELECT * FROM books WHERE title = ? AND author = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$title, $auteur]);
-        $book = $stmt->fetch(PDO::FETCH_OBJ);
-        if ($book) {
-            return new Book($book->title, $book->auteur);
-        } else {
-            return null;
-        }
     }
     public function addBook($book) {
        try {
@@ -68,18 +57,37 @@ class Library {
            echo $e->getMessage();
        }
     }
-    public function addBorrowedBook($book,$borrowedBooks,$member,$dateApp,$dateRetour){
-       $borrowedBooks[]=new Borrow($member,$book,$dateApp,$dateRetour);
-       $book->setAvialable(false);
-    }
-    public function removeBorrowedBook($isbn,$borrowedBooks){
-        foreach($borrowedBooks as $key=>$book){
-            if($book->getIsbn()==$isbn){
-                unset($borrowedBooks[$key]);
-                $book->setAvialable(true);
-                return true;
-            }
+    public function findBook($title, $auteur) {
+        $sql = "SELECT * FROM books WHERE titre = ? AND auteur = ? AND is_available = 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([$title, $auteur]);
+        $data = $stmt->fetch(PDO::FETCH_OBJ);
+        
+        if ($data) {
+            return new Book($data->titre, $data->auteur, $data->isbn, $data->is_available);
         }
-        return false;
+        return null;
+    }
+
+    public function addBorrowedBook($book, $member) {
+        try {
+            $sql = "UPDATE books SET is_available = 0 WHERE isbn = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute([$book->getIsbn()]);
+
+            return new Borrow($member, $book, date("Y-m-d"));
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function removeBorrowedBook($isbn) {
+        try {
+            $sql = "UPDATE books SET is_available = 1 WHERE isbn = ?";
+            $stmt = $this->conn->prepare($sql);
+            return $stmt->execute([$isbn]);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }
