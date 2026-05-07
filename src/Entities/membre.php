@@ -22,5 +22,7 @@ public function removeBorrowedBook($isbn){
     }
     return false;
 }
-
+public function getType(){
+    return $this->type;
+}
 }
