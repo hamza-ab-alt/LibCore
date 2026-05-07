@@ -4,7 +4,7 @@ require_once "src/Entities/librarian.php";
 require_once "src/Entities/user.php";
 require_once "src/Services/Library.php";
 $library1=new Library();
-$librarian=new Librarian("salah","salahtabit12@gmail.com",$library1);
+$librarian=new Librarian("salah","tabit","salahtabit12@gmail.com",$library1);
 echo $librarian;
 // $book=new Book("www","salah","98958-hjh-6777",true);
 // $librarian->addBook($book);
@@ -51,7 +51,12 @@ while (true) {
             $librarian->deleteBook($isbn);
             break;
         case 4:
-            
+            $nameM=readLine("write the name of the number");
+            $prenomM=readLine("write the prenom  of the number");
+            $emailM=readLine("write the email of the number");
+            $role=readLine("write S if is a student and P if is a prof");
+            $librarian->createMembre($nameM,$prenomM,$emailM,$role);
+            break;
         default:
             echo("number doesnt exist in the menu\n");
     }

@@ -8,7 +8,7 @@ require_once __DIR__ . '/src/Services/Library.php';
 
 $db = (new Database())->getConnection();
 $library = new Library();
-$user = new Membre("Ahmed", "ahmed@email.com", "Étudiant", $library);
+$user = new Membre("Ahmed","moulay","ahmed@email.com", "Étudiant", $library);
 echo "Bienvenue " . $user->getName() . " f LibCore CLI\n";
 while (true) {
     echo "\n--- MENU MEMBRE ---\n";

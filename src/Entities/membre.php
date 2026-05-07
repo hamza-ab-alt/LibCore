@@ -4,9 +4,8 @@ class Membre extends User {
     private $type;
     private $borrowedBooks;
     private $library;
-    public function __construct($name, $email, $type, $library) {
-        parent::__construct($name, $email);
-
+    public function __construct($name,$prenom,$email,$type, $library) {
+        parent::__construct($name,$prenom,$email);
         $this->type = $type;
         $this->library = $library;
         $this->borrowedBooks = [];

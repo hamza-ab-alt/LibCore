@@ -24,11 +24,11 @@ class Library {
         return $e->getMessage();
        }
     }
-    public function addMembre($name,$prenom,$role){
+    public function addMembre($name,$prenom,$email,$role){
         try {
-            $sql ="INSERT INTO users (nom,prenom,dateC) values(?,?,now())";
+            $sql ="INSERT INTO users (nom,prenom,email,dateC) values(?,?,?,now())";
             $stm=$this->conn->prepare($sql);
-            $stm->execute([$name,$prenom]);
+            $stm->execute([$name,$prenom,$email]);
             $lastId=$this->conn->lastInsertId();
             if($role='S'){
                 $sql="INSERT INTO membres (role_id,user_id) values (2,?)";

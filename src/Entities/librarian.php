@@ -5,8 +5,8 @@ class Librarian extends User {
 
     private $Library;
 
-    public function __construct($name,$email,$library) {
-        parent::__construct($name,$email);
+    public function __construct($name,$prenom,$email,$library) {
+        parent:: __construct($name,$prenom,$email);
         $this->Library = $library;
     }
     
