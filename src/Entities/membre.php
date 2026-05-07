@@ -10,7 +10,9 @@ class Membre extends User{
         $this->library = $library;
         $this->borrowedBooks = [];
     }
-    
+    public function getName(){
+        return $this->name;
+    }
     public function findBook ($title,$auteur){
         $this->library->findBook($title,$auteur);
     }
@@ -21,8 +23,8 @@ class Membre extends User{
         }
       return $text;
     }
-    public function addBorrowedBook($book,$this->borrowedBooks){
-        $this->library->addBorrowedBook($book,$this->borrowedBooks);
+    public function addBorrowedBook($book,$this->borrowedBooks,$this,$dateApp,$dateRetour){
+        $this->library->addBorrowedBook($book,$this->borrowedBooks,$this,$dateApp,$dateRetour);
     }
     public function removeBorrowedBook($isbn,$this->borrowedBooks){
         $this->library->removeBorrowedBook($isbn,$this->borrowedBooks);

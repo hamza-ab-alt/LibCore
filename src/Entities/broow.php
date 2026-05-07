@@ -1,30 +1,38 @@
 <?php
-class Borrow{
-    private $membre;
+
+class Borrow {
+    private $member;
     private $book;
     private $borrowDate;
     private $returnDate;
+    public function __construct($member, $book, $borrowDate, $returnDate = null) {
 
-    public function __construct( $membre, $book, $borrowDate, $returnDate){
-        $this->membre = $membre;
+        $this->member = $member;
         $this->book = $book;
         $this->borrowDate = $borrowDate;
         $this->returnDate = $returnDate;
     }
 
-    public function getMembre(){
-        return $this->membre;
-    }
-
-    public function getBook(){
+    public function getBook() {
         return $this->book;
     }
 
-    public function getBorrowDate(){
-        return $this->borrowDate;
+    public function getReturnDate() {
+        return $this->returnDate;
     }
 
-    public function getReturnDate(){
-        return $this->returnDate;
+    public function returnBook() {
+        $this->returnDate = date("Y-m-d");
+        $this->book->setAvailable(true);
+    }
+
+    public function __toString() {
+
+        $return = $this->returnDate ?? "Non retourné";
+
+        return "Membre : " . $this->member->getName() .
+               " | Livre : " . $this->book->getTitle() .
+               " | Date emprunt : " . $this->borrowDate .
+               " | Date retour : " . $return;
     }
 }

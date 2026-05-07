@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__."/../config/database.php";
+require __DIR__."/../Entities/book.php";
+require __DIR__."/../Entities/borrow.php";
 class Library {
     private $conn;
     public function __construct() {
@@ -66,8 +68,8 @@ class Library {
            echo $e->getMessage();
        }
     }
-    public function addBorrowedBook($book,$borrowedBooks){
-       $borrowedBooks[]=$book;
+    public function addBorrowedBook($book,$borrowedBooks,$member,$dateApp,$dateRetour){
+       $borrowedBooks[]=new Borrow($member,$book,$dateApp,$dateRetour);
        $book->setAvialable(false);
     }
     public function removeBorrowedBook($isbn,$borrowedBooks){
