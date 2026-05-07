@@ -66,27 +66,18 @@ class Library {
            echo $e->getMessage();
        }
     }
-    public function __construct($id,$name,$email,$type){
-    parent::__construct($id,$name,$email);
-    $this->type =$type;
-}
-public function getBorrowedBooks(){
-    return $this->borrowedBooks;
-}
-public function addBorrowedBook($book){
-    $this->borrowedBooks[]=$book;
-}
-public function removeBorrowedBook($isbn){
-    foreach($this->borrowedBooks as $key=>$book){
-        if($book->getIsbn()==$isbn){
-            unset($this->borrowedBooks[$key]);
-            return true;
-        }
+    public function addBorrowedBook($book,$borrowedBooks){
+       $borrowedBooks[]=$book;
+       $book->setAvialable(false);
     }
-    return false;
-}
-public function getType(){
-    return $this->type;
-}
-
+    public function removeBorrowedBook($isbn,$borrowedBooks){
+        foreach($borrowedBooks as $key=>$book){
+            if($book->getIsbn()==$isbn){
+                unset($borrowedBooks[$key]);
+                $book->setAvialable(true);
+                return true;
+            }
+        }
+        return false;
+    }
 }

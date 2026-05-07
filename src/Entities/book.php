@@ -22,6 +22,9 @@ class Book{
     public function getAvialable(){
        return $this->isAvialable;
     }
+    public function setAvialable($available){
+       $this->isAvialable=$available;
+    }
     public function __toString(){
         return $this->title." ".$this->auteur." ".$this->isbn." Avialable ".($this->isAvialable?"NO":"yes");
     }
