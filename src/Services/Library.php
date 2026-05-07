@@ -1,5 +1,5 @@
 <?php
-require "../config/database.php";
+require_once __DIR__."/../config/database.php";
 class Library {
     private $conn;
     public function __construct() {
@@ -18,11 +18,10 @@ class Library {
         }
     }
     public function addBook($book) {
-        $sql = "INSERT INTO books (title, author, isbn, is_available)
+       try {
+         $sql = "INSERT INTO books (titre, auteur, isbn, is_available)
                 VALUES (?,?,?,?)";
-
         $stmt = $this->conn->prepare($sql);
-
         $stmt->execute([
             $book->getTitle(),
             $book->getAuthor(),
@@ -30,6 +29,9 @@ class Library {
             $book->getAvialable()
         ]);
         return "Book added successfully";
+       } catch (PDOException $e) {
+        return $e->getMessage();
+       }
     }
     public function addMember($member) {
     }
@@ -37,20 +39,32 @@ class Library {
         $sql = "SELECT * FROM books";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        $books = $stmt->fetchAll(PDO::FETCH_OBJ);
-        $text = "";
-        foreach ($books as $book) {
-            $text .=$book;
+        $rows = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $books=[];
+        foreach ($rows as $row) {
+           $books[] = new Book(
+            $row->titre,
+            $row->auteur,
+            $row->isbn,
+            $row->is_available
+        );
         }
-        return $text;
+
+        $text = " ";
+        foreach ($books as $book) {
+           $text.=$book."\n";
+        }
+        echo $text;
     }
     public function deleteBook($isbn) {
-        $sql = "DELETE FROM books WHERE isbn =?";
+       try {
+         $sql = "DELETE FROM books WHERE isbn =?";
         $stmt = $this->conn->prepare($sql);
-
         $stmt->execute([$isbn]);
-
-        return "Book deleted successfully";
+        echo "Book deleted successfully";
+       } catch (PDOException $e) {
+           echo $e->getMessage();
+       }
     }
     public function __construct($id,$name,$email,$type){
     parent::__construct($id,$name,$email);
