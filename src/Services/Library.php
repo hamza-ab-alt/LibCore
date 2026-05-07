@@ -7,7 +7,8 @@ class Library {
         $this->conn = $db->getConnection();
     }
     public function addBook($book) {
-        $sql = "INSERT INTO books (titre, auteur, isbn, is_available)
+       try {
+         $sql = "INSERT INTO books (titre, auteur, isbn, is_available)
                 VALUES (?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
@@ -17,6 +18,9 @@ class Library {
             $book->getAvialable()
         ]);
         return "Book added successfully";
+       } catch (PDOException $e) {
+        return $e->getMessage();
+       }
     }
     public function addMember($member) {
     }
@@ -37,15 +41,19 @@ class Library {
 
         $text = " ";
         foreach ($books as $book) {
-           $text.=$book;
+           $text.=$book."\n";
         }
         echo $text;
     }
     public function deleteBook($isbn) {
-        $sql = "DELETE FROM books WHERE isbn =?";
+       try {
+         $sql = "DELETE FROM books WHERE isbn =?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$isbn]);
-        return "Book deleted successfully";
+        echo "Book deleted successfully";
+       } catch (PDOException $e) {
+           echo $e->getMessage();
+       }
     }
 
 }

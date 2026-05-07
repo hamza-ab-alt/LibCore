@@ -18,7 +18,6 @@ while (true) {
     echo("3:delete Book");
     echo("4:add Membre");
     echo ("0:exist");
-    // echo("1:Display Books");
     $answer=readLine();
     switch ($answer) {
         case 1:
@@ -46,10 +45,11 @@ while (true) {
         case 0:
            echo("see you later");
             exit;
-        case 4:
-            # code...
+        case 3:
+            echo("write the isbn of the book");
+            $isbn=readLine();
+            $librarian->deleteBook($isbn);
             break;
-        
         default:
             echo("number doesnt exist in the menu\n");
     }
