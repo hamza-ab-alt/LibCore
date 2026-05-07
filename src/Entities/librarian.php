@@ -25,8 +25,12 @@ class Librarian extends User {
     public function deleteBook($bookD) {
         $this->Library->deleteBook($bookD);
     }
+    public function changeEtat($isbn){
+        $this->Library->changeEtat($isbn);
+    }
 
     public function __toString() {
         return parent::__toString()." Librarian";
     }
+
 }

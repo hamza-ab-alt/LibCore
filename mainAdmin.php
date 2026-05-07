@@ -17,6 +17,7 @@ while (true) {
     echo("2:add Book");
     echo("3:delete Book");
     echo("4:add Membre");
+    echo("5:change the etat of the book ");
     echo ("0:exist");
     $answer=readLine();
     switch ($answer) {
@@ -57,6 +58,10 @@ while (true) {
             $role=readLine("write S if is a student and P if is a prof");
             $librarian->createMembre($nameM,$prenomM,$emailM,$role);
             break;
+        case 5:
+            $librarian->displayBooks();
+            $bookNu=readLine("write the number of the book that you want to update");
+            $librarian->changeEtat($bookNu);
         default:
             echo("number doesnt exist in the menu\n");
     }

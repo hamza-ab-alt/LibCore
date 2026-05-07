@@ -24,6 +24,27 @@ class Library {
         return $e->getMessage();
        }
     }
+    public function changeEtat($isbn){
+       try {
+        $sql="SELECT * FROM books WHERE isbn =?";
+        $stm=$this->conn->prepare($sql);
+        $stm->execute([$isbn]);
+        $book=$stm->fetch(PDO::FETCH_OBJ);
+        var_dump($book);
+        if($book->is_available == 1){
+            $sql="UPDATE books SET is_available=0 WHERE isbn=?";
+            $stm=$this->conn->prepare($sql);
+            $stm->execute([$isbn]);
+        }else{
+            $sql="UPDATE books SET is_available=1 WHERE isbn=?";
+            $stm=$this->conn->prepare($sql);
+            $stm->execute([$isbn]);   
+        }
+        echo "update success";
+       } catch (PDOException $e) {
+        echo $e->getMessage();
+       }
+    }
     public function addMembre($name,$prenom,$email,$role){
         try {
             $sql ="INSERT INTO users (nom,prenom,email,dateC) values(?,?,?,now())";
