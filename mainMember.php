@@ -5,11 +5,27 @@ require_once __DIR__ . '/src/Entities/Book.php';
 require_once __DIR__ . '/src/Entities/Membre.php';
 require_once __DIR__ . '/src/Entities/broow.php';
 require_once __DIR__ . '/src/Services/Library.php';
-
-$db = (new Database())->getConnection();
-$library = new Library();
-$user = new Membre("Ahmed","moulay","ahmed@email.com", "Étudiant", $library);
-echo "Bienvenue " . $user->getName() . " f LibCore CLI\n";
+$db=new Database();
+$library=new Library();
+echo "--- LOGIN LIBCORE ---\n";
+$email = readline("Dakhel l-email dyalk: ");
+$sql = "SELECT * FROM users WHERE email = ?";
+$stmt = $db->getConnection()->prepare($sql);
+$stmt->execute([$email]);
+$userData = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($userData) {
+    $user = new Membre(
+        $userData['nom'], 
+        $userData['prenom'], 
+        $userData['email'], 
+        $userData['type'], 
+        $library
+    );
+    $user->setId($userData['id']); 
+    echo "\nBienvenue " . $user->getName() . "! Connecté b naja7.\n";
+} else {
+    exit("Erreur: Had l-email ma-kayench f la base de données.\n");
+}
 while (true) {
     echo "\n--- MENU MEMBRE ---\n";
     echo "1. Rechercher un livre (US5)\n";
@@ -32,10 +48,10 @@ while (true) {
             break;
 
         case "2":
+            $library->displayBooks();
             $titre = readline("Smit l-ktab li bghiti t-tsellef: ");
             $auteur = readline("Smit l-auteur: ");
             $book = $user->findBook($titre, $auteur);
-            
             if ($book) {
                 echo $user->borrow($book) . "\n";
             } else {
