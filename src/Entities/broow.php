@@ -1,6 +1,4 @@
 <?php
-namespace LibCore\Entities;
-
 class Borrow {
     private $member;
     private $book;

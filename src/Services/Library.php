@@ -24,8 +24,48 @@ class Library {
         return $e->getMessage();
        }
     }
-    public function addMember($member) {
+    public function changeEtat($isbn){
+       try {
+        $sql="SELECT * FROM books WHERE isbn =?";
+        $stm=$this->conn->prepare($sql);
+        $stm->execute([$isbn]);
+        $book=$stm->fetch(PDO::FETCH_OBJ);
+        var_dump($book);
+        if($book->is_available == 1){
+            $sql="UPDATE books SET is_available=0 WHERE isbn=?";
+            $stm=$this->conn->prepare($sql);
+            $stm->execute([$isbn]);
+        }else{
+            $sql="UPDATE books SET is_available=1 WHERE isbn=?";
+            $stm=$this->conn->prepare($sql);
+            $stm->execute([$isbn]);   
+        }
+        echo "update success";
+       } catch (PDOException $e) {
+        echo $e->getMessage();
+       }
     }
+    public function addMembre($name,$prenom,$email,$role){
+        try {
+            $sql ="INSERT INTO users (nom,prenom,email,dateC) values(?,?,?,now())";
+            $stm=$this->conn->prepare($sql);
+            $stm->execute([$name,$prenom,$email]);
+            $lastId=$this->conn->lastInsertId();
+            if($role='S'){
+                $sql="INSERT INTO membres (role_id,user_id) values (2,?)";
+                $stm=$this->conn->prepare($sql);
+                $stm->execute([$lastId]);
+            }elseif ($role=="P") {
+                $sql="INSERT INTO membres (role_id,user_id) values (1,?)";
+                $stm=$this->conn->prepare($sql);
+                $stm->execute([$lastId]);
+            }
+            echo "add with success";
+            }catch (PDOException $e) {
+            echo $e->getMessage();
+             }
+        } 
+    
     public function displayBooks() {
         $sql = "SELECT * FROM books";
         $stmt = $this->conn->prepare($sql);
@@ -69,18 +109,41 @@ class Library {
         return null;
     }
 
-    public function addBorrowedBook($book, $member) {
-        try {
-            $sql = "UPDATE books SET is_available = 0 WHERE isbn = ?";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute([$book->getIsbn()]);
-
-            return new Borrow($member, $book, date("Y-m-d"));
-        } catch (\Exception $e) {
+ public function addBorrowedBook($book, $member, $daysToKeep = 14) {
+    try {
+        $borrowDate = date("Y-m-d");
+        $returnDate = date("Y-m-d", strtotime("+$daysToKeep days"));
+        $sql1 = "UPDATE books SET is_available = 0 WHERE isbn = ?";
+        $stmt1 = $this->conn->prepare($sql1);
+        $stmt1->execute([$book->getIsbn()]);
+        $sql3 = "SELECT id FROM books WHERE isbn = ?";
+        $stmt3 = $this->conn->prepare($sql3);
+        $stmt3->execute([$book->getIsbn()]);
+        $bookData = $stmt3->fetch(PDO::FETCH_OBJ);
+        if ($bookData) {
+            $bookIdFromDb = $bookData->id;
+            $sql2 = "INSERT INTO borrowings (membre_id, book_id, borrowat, returnat) 
+                    VALUES (?, ?, ?, ?)";
+            $stmt2 = $this->conn->prepare($sql2);
+            $stmt2->execute([
+                $member->getId(), 
+                $bookIdFromDb, 
+                $borrowDate, 
+                $returnDate
+            ]);
+            echo "L-ktab t-borrowa b naja7! Khass yrje3 f: " . $returnDate;
+             $b =new Borrow($member, $book, $borrowDate);
+             return $b;
+        } else {
+            echo "Erreur: Ktab ma-lqinahch f la base.";
             return null;
         }
-    }
 
+    } catch (PDOException $e) {
+        echo "Erreur: " . $e->getMessage();
+        return null;
+    }
+}
     public function removeBorrowedBook($isbn) {
         try {
             $sql = "UPDATE books SET is_available = 1 WHERE isbn = ?";
