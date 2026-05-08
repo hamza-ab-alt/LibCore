@@ -1,10 +1,10 @@
 <?php
+namespace LibCore\Entities;
 class Borrow {
     private $member;
     private $book;
     private $borrowDate;
     private $returnDate;
-
     public function __construct($member, $book, $borrowDate, $returnDate = null) {
         $this->member = $member;
         $this->book = $book;
@@ -12,11 +12,13 @@ class Borrow {
         $this->returnDate = $returnDate;
     }
 
-    public function getBook() { return $this->book; }
+    public function getBook() { 
+        return $this->book; 
+    }
     
     public function returnBook() {
         $this->returnDate = date("Y-m-d");
-        $this->book->setAvailable(true);
+        $this->book->setAvailable(true); 
     }
 
     public function __toString() {
