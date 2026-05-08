@@ -4,7 +4,7 @@ require_once "src/Entities/librarian.php";
 require_once "src/Entities/user.php";
 require_once "src/Services/Library.php";
 $library1=new Library();
-$librarian=new Librarian("salah","salahtabit12@gmail.com",$library1);
+$librarian=new Librarian("salah","tabit","salahtabit12@gmail.com",$library1);
 echo $librarian;
 // $book=new Book("www","salah","98958-hjh-6777",true);
 // $librarian->addBook($book);
@@ -17,6 +17,7 @@ while (true) {
     echo("2:add Book");
     echo("3:delete Book");
     echo("4:add Membre");
+    echo("5:change the etat of the book ");
     echo ("0:exist");
     $answer=readLine();
     switch ($answer) {
@@ -50,6 +51,17 @@ while (true) {
             $isbn=readLine();
             $librarian->deleteBook($isbn);
             break;
+        case 4:
+            $nameM=readLine("write the name of the number");
+            $prenomM=readLine("write the prenom  of the number");
+            $emailM=readLine("write the email of the number");
+            $role=readLine("write S if is a student and P if is a prof");
+            $librarian->createMembre($nameM,$prenomM,$emailM,$role);
+            break;
+        case 5:
+            $librarian->displayBooks();
+            $bookNu=readLine("write the number of the book that you want to update");
+            $librarian->changeEtat($bookNu);
         default:
             echo("number doesnt exist in the menu\n");
     }

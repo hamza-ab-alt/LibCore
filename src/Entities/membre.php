@@ -1,47 +1,53 @@
 <?php
+require_once "user.php";
 class Membre extends User {
     private $type;
-    private $borrowedBooks = []; 
+    private $borrowedBooks;
     private $library;
-
-    public function __construct( $name, $email, $type, $library) {
-        parent::__construct($name,$email);
+    public function __construct($name, $prenom, $email, $type, $library) {
+        parent::__construct($name, $prenom, $email);
         $this->type = $type;
         $this->library = $library;
+        $this->borrowedBooks = [];
     }
-    public function getName() {
-        return $this->name;
+        public function getType() {
+        return $this->type;
     }
-    public function findBook($title, $auteur) {
-        return $this->library->findBook($title, $auteur);
-    }
-
     public function getBorrowedBooks() {
-        if (empty($this->borrowedBooks)) return "Aucun livre emprunté.\n";
-        $text = "Mes Emprunts:\n";
-        foreach ($this->borrowedBooks as $borrow) {
-            $text .= $borrow . "\n";
+        if (empty($this->borrowedBooks)) {
+            return "Ma-3ndek hta ktab m-sellef dba.\n";
+        }
+        $text = "--- Vos livres empruntés ---\n";
+        foreach ($this->borrowedBooks as $book) {
+            $text .= $book . "\n";
         }
         return $text;
     }
-    public function borrow($book) {
-        $newBorrow = $this->library->addBorrowedBook($book, $this);
-        if ($newBorrow) {
-            $this->borrowedBooks[] = $newBorrow;
-            return "Emprunt réussi!";
-        }
-        return "Livre indisponible.";
+    public function findBook($title, $author) {
+        return $this->library->findBook($title, $author);
     }
-
+    public function borrow($book) {
+        $success = $this->library->addBorrowedBook($book, $this);
+        if ($success) {
+            $this->borrowedBooks[] = $book;
+            return "Succès: '" . $book->getTitle() . "' t-borrowa b naja7!";
+        }
+        return "Erreur: Ma-qdernach n-kemlo l-opération f la base de données.";
+    }
     public function returnBook($isbn) {
-        foreach ($this->borrowedBooks as $key => $borrow) {
-            if ($borrow->getBook()->getIsbn() === $isbn) {
-                if ($this->library->removeBorrowedBook($isbn)) {
+        $success = $this->library->removeBorrowedBook($isbn);   
+        if ($success) {
+            foreach ($this->borrowedBooks as $key => $book) {
+                if ($book->getIsbn() == $isbn) {
                     unset($this->borrowedBooks[$key]);
-                    return "Livre retourné.";
+                    return "Ktab (ISBN: $isbn) rje3 l-maktaba, chokran!";
                 }
             }
+            return "Ktab t-updata f la base, walakin ma-lqinahch f la liste dyalk.";
         }
-        return "Livre non trouvé dans votre liste.";
+        return "Erreur: Had l-ktab ma-lqinahch aw kayn mouchkil f l-update.";
+    }
+    public function addBorrowedBook($book, $dateApp, $dateRetour) {
+        $this->library->addBorrowedBook($book, $this, $dateApp, $dateRetour);
     }
 }

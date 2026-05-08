@@ -5,8 +5,8 @@ class Librarian extends User {
 
     private $Library;
 
-    public function __construct($name,$email,$library) {
-        parent::__counstructor($name,$email);
+    public function __construct($name,$prenom,$email,$library) {
+        parent:: __construct($name,$prenom,$email);
         $this->Library = $library;
     }
     
@@ -14,8 +14,8 @@ class Librarian extends User {
         $this->Library->addBook($book);
     }
 
-    public function createMembre($membre) {
-        $this->Library->addMembre($membre);
+    public function createMembre($name,$prenom,$email,$role) {
+        $this->Library->addMembre($name,$prenom,$email,$role);
     }
 
     public function displayBooks() {
@@ -25,8 +25,12 @@ class Librarian extends User {
     public function deleteBook($bookD) {
         $this->Library->deleteBook($bookD);
     }
+    public function changeEtat($isbn){
+        $this->Library->changeEtat($isbn);
+    }
 
     public function __toString() {
         return parent::__toString()." Librarian";
     }
+
 }
