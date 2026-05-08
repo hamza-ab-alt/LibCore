@@ -1,4 +1,3 @@
--- Active: 1778145348381@@127.0.0.1@3306
 CREATE DATABASE library;
 use library;
 CREATE TABLE roles (
@@ -41,3 +40,4 @@ CREATE TABLE borrowings (
     FOREIGN KEY (membre_id) REFERENCES membres(id),
     FOREIGN KEY (book_id) REFERENCES books(id)
 );
+ALTER Table users ADD email VARCHAR(255) UNIQUE ;
